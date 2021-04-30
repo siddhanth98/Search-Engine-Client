@@ -1,13 +1,7 @@
 import React from "react";
-import {useState, useEffect} from "react";
 import Socket from "./Socket";
 import TextField from "@material-ui/core/TextField";
 import SearchIcon from "@material-ui/icons/Search";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import {makeStyles} from "@material-ui/core";
-import Document from "./Document";
 import Documents from "./Documents";
 
 class App extends React.Component {
@@ -82,21 +76,24 @@ class App extends React.Component {
 
         return (
             <center>
+                <h1>University of Illinois, Chicago</h1>
                 <form>
                     <div>
-                        <TextField id={"standard-basic"} label={"Search"} onInput={this.handleInput}/>
+                        <TextField id={"standard-basic"}
+                                   label={"Search"}
+                                   onInput={this.handleInput}
+                                   margin={"none"}
+                                   size={"medium"}
+                    />
                         <SearchIcon style = {iconStyle}
                                     onMouseEnter = {this.toggleHover}
                                     onMouseLeave = {this.toggleHover}
                                     onClick = {this.handleClick}
+                                    fontSize={"large"}
                         />
-                        <Documents documents={this.state.docs}/>
                     </div>
                 </form>
-
-                <List>
-
-                </List>
+                <Documents documents={this.state.docs}/>
             </center>
         );
     }
