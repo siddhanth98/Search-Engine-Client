@@ -23,7 +23,7 @@ function App (props) {
                 <Divider variant={"middle"} component={"li"} />
             </div>
         );
-    }).slice(0, 10);
+    });
 
     return (
         <List className={styles.root}>
