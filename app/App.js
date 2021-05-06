@@ -10,11 +10,13 @@ class App extends React.Component {
         this.state = {
             socket: null,
             query: "",
+            k: 0,
             docs: [],
             hover: false
         }
         this.registerSocket = this.registerSocket.bind(this);
         this.handleInput = this.handleInput.bind(this);
+        this.getDocumentCount = this.getDocumentCount.bind(this);
         this.handleClick = this.handleClick.bind(this);
         this.toggleHover = this.toggleHover.bind(this);
     }
@@ -55,6 +57,17 @@ class App extends React.Component {
         });
     }
 
+    getDocumentCount(e) {
+        if (e.target.value.length > 0) {
+            this.setState((state, props) => {
+                return {k: parseInt(e.target.value)}
+            });
+        }
+        else this.setState((state, props) => {
+            return {k: 0}
+        });
+    }
+
     toggleHover(e) {
         this.setState((state, props) => {
             return {hover: !state.hover};
@@ -65,14 +78,16 @@ class App extends React.Component {
         if (this.state.socket) {
             console.log(`sending query ${this.state.query}`);
             let conn = this.state.socket;
-            let message = JSON.stringify({query: this.state.query});
-            conn.send(message);
+            let message = {query: this.state.query, k: this.state.k};
+            conn.send(JSON.stringify(message));
         }
         else console.log("socket connection is not open");
     }
 
     render() {
-        let iconStyle = this.state.hover === true ? {cursor: "pointer", backgroundColor: "#DFDFDF"} : {backgroundColor: "#FFF"};
+        let generalStyle = {marginLeft: "20px", marginTop: "10px"}
+        let iconStyle = this.state.hover === true ? {cursor: "pointer", backgroundColor: "#DFDFDF", ...generalStyle} : {backgroundColor: "#FFF", ...generalStyle};
+        let counterStyle = {width: 60, height: 20, marginRight: "30px"};
 
         return (
             <center>
@@ -84,6 +99,7 @@ class App extends React.Component {
                                    onInput={this.handleInput}
                                    margin={"none"}
                                    size={"medium"}
+                                   style={{width: "370px"}}
                     />
                         <SearchIcon style = {iconStyle}
                                     onMouseEnter = {this.toggleHover}
@@ -92,6 +108,11 @@ class App extends React.Component {
                                     fontSize={"large"}
                         />
                     </div>
+                    <br />
+                    <input type={"number"}
+                           style={counterStyle}
+                           onInput={this.getDocumentCount}
+                    />
                 </form>
                 <Documents documents={this.state.docs}/>
             </center>
